@@ -978,12 +978,35 @@ const products = [
     }
   ]
 
+
+
   app.get("/", (req, res) => {
     res.send(products);
   });
   
   app.get("/:id", (req, res) => {
-    console.log(req.params.id);
     const id = products.find((data) => data.id == req.params.id);
     res.json(id);
   });
+
+  app.delete('/products/:id', async (req,res)=>{
+    console.log(req.params)
+    let data = await products.deleteOne(req.params)
+    res.send(data)
+  })
+
+app.delete('/products/:id', (req, res) => {
+  let id = req.params.id;
+  products = products.filter(product => product.id != id)
+  res.send(`id: ${id} asda deleted`)
+})
+
+app.post('/products', (req, res) => {
+  const product = {
+      id: products.length ,
+      supplierId: req.body.supplierId,
+      unitPrice: req.body.unitPrice,
+  };
+  products.push(product)
+  res.send(product)
+})
